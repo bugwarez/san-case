@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { getNav } from "../routes/nav";
 
 export default function Forbidden() {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ export default function Forbidden() {
       <p className="mb-4">You do not have permission to access this page.</p>
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={() => navigate("/")}
+        onClick={() => getNav().home.go(undefined, { navigate })}
       >
         Go Home
       </button>

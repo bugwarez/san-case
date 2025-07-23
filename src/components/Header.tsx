@@ -1,4 +1,5 @@
 import { useAuth } from "../auth/AuthProvider";
+import { getNav } from "../routes/nav";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Header() {
@@ -10,7 +11,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    getNav().login.go(undefined, { navigate });
   };
 
   return (

@@ -1,9 +1,11 @@
 import { useAuth } from "../auth/AuthProvider";
+import { getNav } from "../routes/nav";
 import { useNavigate } from "react-router-dom";
 
+import type { Permission } from "../routes/routeConfig";
 const DUMMY_USER = {
   name: "John Doe",
-  permissions: ["VIEW_POSTS", "VIEW_COMMENTS"],
+  permissions: ["VIEW_POSTS", "VIEW_COMMENTS"] as Permission[],
 };
 
 export default function Login() {
@@ -12,7 +14,7 @@ export default function Login() {
 
   const handleLogin = () => {
     login(DUMMY_USER);
-    navigate("/");
+    getNav().home.go(undefined, { navigate });
   };
 
   return (

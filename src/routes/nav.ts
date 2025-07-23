@@ -25,33 +25,32 @@ export type NavObject = {
     ) => void;
   };
 };
-
-const nav: NavObject = {};
-
-routes.forEach((route) => {
-  nav[route.name as keyof NavObject] = {
-    get: (params?: Params) => buildUrl(route.path, params),
-    go: (
-      params?: Params,
-      options?: {
-        navigate?: ReturnType<typeof useNavigate>;
-        userPermissions?: Permission[];
-      }
-    ) => {
-      const url = buildUrl(route.path, params);
-      if (route.permissions && options?.userPermissions) {
-        const hasPermission = route.permissions.some((p) =>
-          options.userPermissions!.includes(p)
-        );
-        if (!hasPermission) {
-          alert("You do not have permission to access this page.");
-          if (options?.navigate) options.navigate("/403");
-          return;
+export function getNav(): NavObject {
+  const nav: NavObject = {};
+  routes.forEach((route) => {
+    nav[route.name as keyof NavObject] = {
+      get: (params?: Params) => buildUrl(route.path, params),
+      go: (
+        params?: Params,
+        options?: {
+          navigate?: ReturnType<typeof useNavigate>;
+          userPermissions?: Permission[];
         }
-      }
-      if (options?.navigate) options.navigate(url);
-    },
-  };
-});
-
-export default nav;
+      ) => {
+        const url = buildUrl(route.path, params);
+        if (route.permissions && options?.userPermissions) {
+          const hasPermission = route.permissions.some((p) =>
+            options.userPermissions!.includes(p)
+          );
+          if (!hasPermission) {
+            alert("You do not have permission to access this page.");
+            if (options?.navigate) options.navigate("/403");
+            return;
+          }
+        }
+        if (options?.navigate) options.navigate(url);
+      },
+    };
+  });
+  return nav;
+}

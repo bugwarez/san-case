@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
+import type { Permission } from "../routes/routeConfig";
 
 export type User = {
   name: string;
-  permissions: string[];
+  permissions: Permission[];
 };
 
 const USER_KEY = ["currentUser"];
