@@ -1,4 +1,5 @@
-import { useParams, NavLink, Outlet, useLocation } from "react-router-dom";
+import { useParams, NavLink, Outlet } from "react-router-dom";
+import { getNav } from "../routes/nav";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/client";
 
@@ -8,7 +9,7 @@ export default function Post() {
     queryKey: ["post", id],
     queryFn: async () => (await api.get(`/posts/${id}`)).data,
   });
-  const location = useLocation();
+  // const location = useLocation();
 
   if (isLoading) return <div>Loading...</div>;
   if (!data) return <div>Post not found</div>;
@@ -19,7 +20,7 @@ export default function Post() {
       <p className="mb-4">{data.body}</p>
       <div className="flex gap-4 mb-4">
         <NavLink
-          to={`/posts/${id}/edit`}
+          to={id ? getNav().editPost.get({ id })! : "#"}
           className={({ isActive }) =>
             isActive ? "font-bold underline" : "text-blue-600 underline"
           }
@@ -27,7 +28,7 @@ export default function Post() {
           Edit Post
         </NavLink>
         <NavLink
-          to={`/posts/${id}/comments`}
+          to={id ? getNav().postComments.get({ id })! : "#"}
           className={({ isActive }) =>
             isActive ? "font-bold underline" : "text-blue-600 underline"
           }

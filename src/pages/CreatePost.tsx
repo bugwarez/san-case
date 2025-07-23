@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getNav } from "../routes/nav";
 import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
@@ -9,7 +10,7 @@ export default function CreatePost() {
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Post created (not really, since this is a fake API)!");
-    navigate("/posts");
+    getNav().posts.go(undefined, { navigate });
   };
 
   return (

@@ -3,6 +3,7 @@ import api from "../api/client";
 import { Link } from "react-router-dom";
 import type { Post } from "../types/post";
 import type { Comment } from "../types/comment";
+import { getNav } from "../routes/nav";
 
 export default function Home() {
   const { data: posts, isLoading: loadingPosts } = useQuery({
@@ -33,7 +34,7 @@ export default function Home() {
                 >
                   <Link
                     className="text-blue-700 font-semibold underline hover:text-blue-900"
-                    to={`/posts/${post.id}`}
+                    to={getNav().post.get({ id: post.id })}
                   >
                     {post.title}
                   </Link>

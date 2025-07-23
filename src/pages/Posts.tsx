@@ -1,11 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
+import { getNav } from "../routes/nav";
 import type { Post } from "../types/post";
 
 export default function Posts() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => (await api.get("/posts")).data,
@@ -25,28 +27,38 @@ export default function Posts() {
             >
               <Link
                 className="text-blue-700 font-semibold underline hover:text-blue-900"
-                to={`/posts/${post.id}`}
+                to={getNav().post.get({ id: post.id })}
               >
                 {post.title}
               </Link>
               {user?.permissions.includes("EDIT_POST") && (
-                <Link
+                <button
                   className="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition px-3 py-1 rounded shadow"
-                  to={`/posts/${post.id}/edit`}
+                  onClick={() =>
+                    getNav().editPost.go(
+                      { id: post.id },
+                      { navigate, userPermissions: user.permissions }
+                    )
+                  }
                 >
                   Edit
-                </Link>
+                </button>
               )}
             </li>
           ))}
         </ul>
         {user?.permissions.includes("CREATE_POST") && (
-          <Link
+          <button
             className="inline-block mt-2 px-5 py-2 bg-green-600 hover:bg-green-700 transition text-white rounded font-semibold shadow"
-            to="/posts/create"
+            onClick={() =>
+              getNav().createPost.go(undefined, {
+                navigate,
+                userPermissions: user.permissions,
+              })
+            }
           >
             + Create Post
-          </Link>
+          </button>
         )}
       </div>
     </div>
